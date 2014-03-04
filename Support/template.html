@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>
+        JavaScript Validation Report
+    </title>
+    <link rel="stylesheet" href="tm-file://{{ TM_BUNDLE_SUPPORT }}/bootstrap.min.css" type="text/css">
+    <style type="text/css" media="screen">
+        span.symbol {
+            font-family: 'Apple Color Emoji';
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="content">
+        <!-- EJS-rendered content goes here -->
+    </div>
+
+    <script src="tm-file://{{ TM_BUNDLE_SUPPORT }}/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="tm-file://{{ TM_BUNDLE_SUPPORT }}/ejs_production.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" charset="utf-8">
+        var ejsTemplate = {{ EJS_TEMPLATE }};
+        var context = {{ CONTEXT }};
+    </script>
+    <script src="tm-file://{{ TM_BUNDLE_SUPPORT }}/document.js" type="text/javascript" charset="utf-8"></script>
+</body>
+</html>

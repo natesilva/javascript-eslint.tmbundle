@@ -1,0 +1,84 @@
+<% if (errorCount || warningCount) { %>
+    <div class="panel panel-default">
+<% } else { %>
+    <div class="panel panel-success">
+<% } %>
+    <div class="panel-heading">
+        <h4>
+        Validation report for <a href="<%= fileUrl %>"><tt><b><%= targetFilename %></b></tt></a>
+        <div class="small"><%= timestamp %></div>
+        </h4>
+    </div>
+    <div class="panel-body">
+        <% if (eslintrcValid) { %>
+            <p class="small">Used settings from
+                <a href="txmt://open?url=file://<%= eslintrc %>"><tt><%= eslintrc %></tt></a>
+            </p>
+        <% } else if (eslintrc && !eslintrcValid) { %>
+            <p class="small text-danger">Used generic default settings because
+                <a href="txmt://open?url=file://<%= eslintrc %>"><tt><%= eslintrc %></tt></a>
+                was not valid JSON.
+            </p>
+        <% } else { %>
+            <p class="small">No .eslintrc found. Used default settings.</p>
+            <p class="small">See
+                <a href="http://eslint.org/docs/configuring/">http://eslint.org/docs/configuring/</a>
+                for .eslintrc customization instructions.
+            </p>
+        <% } %>
+        <% if (errorCount) { %>
+            <% if (errorCount === 1) { %>
+                <span class="label label-danger">1 error</span>
+            <% } else { %>
+                <span class="label label-danger"><%= errorCount %> errors</span>
+            <% } %>
+        <% } %>
+
+        <% if (warningCount) { %>
+            <% if (warningCount === 1) { %>
+                <span class="label label-warning">1 warning</span>
+            <% } else { %>
+                <span class="label label-warning"><%= warningCount %> warnings</span>
+            <% } %>
+        <% } %>
+
+        <% if (!errorCount && !warningCount) { %>
+            <span class="label label-success">No errors or warnings</span>
+        <% } %>
+    </div>
+
+    <ul class="list-group">
+        <% if (!errorCount && !warningCount) { %>
+            <li class="list-group-item">
+                <span class="symbol">&#9989;</span>
+                Looks good!
+            </li>
+        <% } %>
+
+        <%
+            for (var index = 0, len = issues.length; index !== len; ++index) {
+                var issue = issues[index];
+        %>
+            <li class="list-group-item">
+                <% if (issue.code[0] === 'E') { %>
+                    <span class="symbol">&#10060;</span>
+                <% } else if (issue.code[0] === 'W') { %>
+                    <span class="symbol">&#9888;</span>
+                <% } %>
+                <a href="<%= issue.url %>">at line <%= issue.line %> position <%= issue.character %></a>
+                <div><tt>
+                    <%= issue.reason %> (<a href="http://eslint.org/docs/rules/<%= issue.shortname %>.html" class="open-external"><%= issue.shortname %></a>)
+                </tt></div>
+            </li>
+        <% } %>
+    </ul>
+</div>
+
+<div class="small text-center">
+    <b>
+    <a href="https://github.com/natesilva/javascript-eslint.tmbundle"
+            class="open-external">
+        javascript-eslint TextMate Bundle
+    </a>
+    </b>
+</div>
