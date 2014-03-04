@@ -2,7 +2,7 @@
 
 Use the [ESLint](http://eslint.org/) JavaScript validator in [TextMate 2](https://github.com/textmate/textmate).
 
-![Screenshot 1](https://raw.github.com/natesilva/eslint.tmbundle/master/no-errors.png)
+![Screenshot 1](https://raw.github.com/natesilva/javascript-eslint.tmbundle/master/no-errors.png)
 
 ## Features
 
@@ -10,7 +10,7 @@ Use the [ESLint](http://eslint.org/) JavaScript validator in [TextMate 2](https:
 * Shows you which `.eslintrc` settings are being used, with a direct link to open the applicable settings file.
 * Errors and warnings include a link to the relevant explanation on [eslint.org](http://eslint.org/).
 
-![Screenshot 2](https://raw.github.com/natesilva/eslint.tmbundle/master/with-errors.png)
+![Screenshot 2](https://raw.github.com/natesilva/javascript-eslint.tmbundle/master/with-errors.png)
 
 ## Install
 
