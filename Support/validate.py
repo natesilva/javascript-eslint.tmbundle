@@ -294,8 +294,10 @@ def validate(quiet=False):
         sys.exit()
 
     # parse the results
-    rx = re.compile('^[^:]+\: line (?P<line>\d+), col (?P<character>\d+), ' +
-        '(?P<code>\w+) - (?P<reason>.+) \((?P<shortname>\w+)\)$')
+
+    rx = re.compile('^[^:]+\\: line (?P<line>\\d+), ' +
+        'col (?P<character>\\d+), ' +
+        '(?P<code>\\w+) - (?P<reason>.+)\\s?(\\((?P<shortname>\\w+)\\))?$')
 
     issues = []
 
@@ -313,9 +315,11 @@ def validate(quiet=False):
             'line': int(m.group('line')),
             'character': int(m.group('character')) + 1,
             'code': m.group('code'),
-            'reason': m.group('reason'),
-            'shortname': m.group('shortname')
+            'reason': m.group('reason')
         }
+
+        if m.group('shortname'):
+            issue['shortname'] = m.group('shortname')
 
         issues.append(issue)
 

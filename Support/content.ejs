@@ -67,7 +67,10 @@
                 <% } %>
                 <a href="<%= issue.url %>">at line <%= issue.line %> position <%= issue.character %></a>
                 <div><tt>
-                    <%= issue.reason %> (<a href="http://eslint.org/docs/rules/<%= issue.shortname %>.html" class="open-external"><%= issue.shortname %></a>)
+                    <%= issue.reason %>
+                    <% if (issue.shortname) { %>
+                         (<a href="http://eslint.org/docs/rules/<%= issue.shortname %>.html" class="open-external"><%= issue.shortname %></a>)
+                    <% } %>
                 </tt></div>
             </li>
         <% } %>
