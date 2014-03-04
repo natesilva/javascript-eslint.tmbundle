@@ -295,9 +295,8 @@ def validate(quiet=False):
 
     # parse the results
 
-    rx = re.compile('^[^:]+\\: line (?P<line>\\d+), ' +
-        'col (?P<character>\\d+), ' +
-        '(?P<code>\\w+) - (?P<reason>.+)\\s?(\\((?P<shortname>\\w+)\\))?$')
+    rx = re.compile('^[^:]+\: line (?P<line>\d+), col (?P<character>\d+), ' +
+        '(?P<code>\w+) - (?P<reason>.+?)(\s\((?P<shortname>[\w\-]+)\))?$')
 
     issues = []
 
