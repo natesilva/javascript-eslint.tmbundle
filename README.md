@@ -1,6 +1,6 @@
 # JavaScript ESLint TextMate Bundle
 
-Use the [ESLint](http://eslint.org/) JavaScript validator in [TextMate 2](https://github.com/textmate/textmate).
+Use the [ESLint](http://eslint.org/) JavaScript validator in [TextMate 2](https://github.com/textmate/textmate). (Want to use JSHint instead? Try the [jshint-external.tmbundle](https://github.com/natesilva/javascript-eslint.tmbundle).)
 
 ![Screenshot 1](https://raw.github.com/natesilva/javascript-eslint.tmbundle/master/no-errors.png)
 
