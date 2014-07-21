@@ -1,8 +1,10 @@
 # JavaScript ESLint TextMate Bundle
 
-Use the [ESLint](http://eslint.org/) JavaScript validator in [TextMate 2](https://github.com/textmate/textmate). (Want to use JSHint instead? Try the [jshint-external.tmbundle](https://github.com/natesilva/jshint-external.tmbundle).)
+Use the [ESLint](http://eslint.org/) JavaScript validator in [TextMate 2](https://github.com/textmate/textmate).
 
-![Screenshot 1](https://raw.github.com/natesilva/javascript-eslint.tmbundle/master/no-errors.png)
+<small>Want to use JSHint instead? Try the [jshint-external.tmbundle](https://github.com/natesilva/jshint-external.tmbundle).</small>
+
+<img src="http://natesilva.github.io/javascript-eslint.tmbundle/images/no-errors-1.1.0.png" width="560" style="width:560px;" alt="Screenshot 1">
 
 ## Features
 
@@ -10,7 +12,7 @@ Use the [ESLint](http://eslint.org/) JavaScript validator in [TextMate 2](https:
 * Shows you which `.eslintrc` settings are being used, with a direct link to open the applicable settings file.
 * Errors and warnings include a link to the relevant explanation on [eslint.org](http://eslint.org/).
 
-![Screenshot 2](https://raw.github.com/natesilva/javascript-eslint.tmbundle/master/with-errors.png)
+<img src="http://natesilva.github.io/javascript-eslint.tmbundle/images/with-errors-1.1.0.png" width="560" style="width:560px;" alt="Screenshot 2">
 
 ## Install
 
@@ -22,13 +24,11 @@ First install ESLint:
 Now install the bundle:
 
 1. [Download the latest release .zip file](https://github.com/natesilva/javascript-eslint.tmbundle/releases/latest).
-2. Extract it.
-3. Rename the extracted folder to `javascript-eslint.tmbundle`.
-4. Double-click to install it in TextMate.
+2. Extract it and double-click to install in TextMate.
 
 ## Release Notes
 
-Release notes are found in the [Releases](https://github.com/natesilva/javascript-eslint.tmbundle/releases) section of this GitHub repo.
+<a href="https://github.com/natesilva/javascript-eslint.tmbundle/releases">View the release notes.</a>
 
 ## Configuration
 
