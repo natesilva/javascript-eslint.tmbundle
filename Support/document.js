@@ -3,6 +3,8 @@
 'use strict';
 
 Zepto(document).ready(function($) {
+  var VERSION = '1.1.0';
+
   // Remove the marker flag indicating that the validation window
   // for this document is showing.
   $(document).on('visibilitychange', function() {
@@ -39,4 +41,6 @@ Zepto(document).ready(function($) {
     }
     TextMate.system('open "' + encodeURI(href) + '"', null);
   });
+
+  $('.version-number').text('v' + VERSION);
 });

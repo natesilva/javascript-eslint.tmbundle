@@ -11,7 +11,11 @@
 
 TPY=${TM_PYTHON:-python}
 HTML=$("${TPY}" "${TM_BUNDLE_SUPPORT}/validate.py" -q)
-if [[ "${HTML}" != "" ]]; then exit_show_html "${HTML}"; fi  
+if [[ "${HTML}" = "" ]]; then
+	exit_discard
+else
+	echo ${HTML}
+fi
 </string>
 	<key>input</key>
 	<string>scope</string>
@@ -24,9 +28,9 @@ if [[ "${HTML}" != "" ]]; then exit_show_html "${HTML}"; fi
 	<key>outputCaret</key>
 	<string>afterOutput</string>
 	<key>outputFormat</key>
-	<string>text</string>
+	<string>html</string>
 	<key>outputLocation</key>
-	<string>discard</string>
+	<string>newWindow</string>
 	<key>scope</key>
 	<string>source.js</string>
 	<key>uuid</key>
