@@ -155,7 +155,7 @@ def validate(quiet=False):
 
     # Copy stdin to a named temporary file: at this time eslint
     # doesn’t support reading from stdin.
-    file_to_validate = tempfile.NamedTemporaryFile()
+    file_to_validate = tempfile.NamedTemporaryFile(suffix='.js')
 
     if os.environ['TM_SCOPE'].startswith('source.js'):
         shutil.copyfileobj(sys.stdin, file_to_validate)
