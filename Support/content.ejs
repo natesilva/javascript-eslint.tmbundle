@@ -31,14 +31,9 @@
 
             Validation report for <a href="<%= fileUrl %>"><tt><b><%= targetFilename %></b></tt></a>
 
-            <% if (eslintrcValid) { %>
+            <% if (eslintrc) { %>
                 <p class="small">Used settings from
                     <a href="txmt://open?url=file://<%= eslintrc %>"><tt><%= eslintrc %></tt></a>
-                </p>
-            <% } else if (eslintrc && !eslintrcValid) { %>
-                <p class="small text-danger">Used generic default settings because
-                    <a href="txmt://open?url=file://<%= eslintrc %>"><tt><%= eslintrc %></tt></a>
-                    was not valid JSON.
                 </p>
             <% } else { %>
                 <p class="small">No .eslintrc found. Used default settings.</p>

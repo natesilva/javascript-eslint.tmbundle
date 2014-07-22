@@ -145,13 +145,6 @@ def get_marker_directory():
 def validate(quiet=False):
     # locate the .eshintrc to use
     eslintrc = find_eslintrc(os.environ.get('TM_DIRECTORY', None))
-    eslintrc_valid = False
-    if eslintrc:
-        try:
-            json.load(open(eslintrc, 'r'))
-            eslintrc_valid = True
-        except ValueError:
-            eslintrc_valid = False
 
     # Copy stdin to a named temporary file: at this time eslint
     # doesn’t support reading from stdin.
@@ -207,7 +200,7 @@ def validate(quiet=False):
         'compact'
     ]
 
-    if eslintrc and eslintrc_valid:
+    if eslintrc:
         args.append('-c')
         args.append(eslintrc)
 
@@ -342,7 +335,6 @@ def validate(quiet=False):
     # context data we will send to JavaScript
     context = {
         'eslintrc': eslintrc,
-        'eslintrcValid': eslintrc_valid,
         'issues': issues,
         'timestamp': time.strftime('%c')
     }
