@@ -9,7 +9,7 @@ Use the [ESLint](http://eslint.org/) JavaScript validator in [TextMate 2](https:
 ## Features
 
 * Validate automatically when you save your file, and on-demand.
-* Shows you which `.eslintrc` settings are being used, with a direct link to open the applicable settings file.
+* Supports ESLint’s native configuration cascading.
 * Errors and warnings include a link to the relevant explanation on [eslint.org](http://eslint.org/).
 
 <img src="http://natesilva.github.io/javascript-eslint.tmbundle/images/with-errors-1.1.0.png" width="560" style="width:560px;" alt="Screenshot 2">
@@ -20,6 +20,7 @@ First install ESLint:
 
 1. Install [Node.js](http://nodejs.org/).
 2. `[sudo] npm install -g eslint`
+3. (Optional) Create a starter ESLint configuration: `eslint --init`
 
 Now install the bundle:
 
@@ -40,8 +41,8 @@ In most cases no configuration is required. However, in some cases you may want 
     2. Navigate to *JavaScript ESLint* > *Menu Actions* > *Save & Validate with ESLint*.
     3. In the drawer that appears, delete the “Key Equivalent” of `⌘S`.
 * **Use a project-specific ESLint configuration:**
-    * `eslint` automatically uses `.eslintrc` files found in your directory tree. See the documentation on [configuring ESLint](http://eslint.org/docs/user-guide/configuring) for more information.
-    
+    * `eslint` automatically uses `.eslintrc` and `package.json` files found in your directory tree. See [the documentation](http://eslint.org/docs/user-guide/configuring#configuration-cascading-and-hierarchy) for more information.
+
 ## Uninstall
 
 1. Quit TextMate.

@@ -21,62 +21,6 @@ import hashlib
 import shutil
 
 
-def find_up_the_tree(dir_name, filename, max_depth=30):
-    """
-    Search for the named file in the dir_name or any of its parent
-    directories, up to the root directory.
-    """
-
-    while True:
-        if max_depth <= 0:
-            return None
-
-        full_path = os.path.abspath(os.path.join(dir_name, filename))
-        if os.path.isfile(full_path):
-            return full_path
-
-        (drive, path) = os.path.splitdrive(dir_name)
-        is_root = (path == os.sep or path == os.altsep)
-        if is_root:
-            return None
-
-        max_depth -= 1
-        dir_name = os.path.abspath(os.path.join(dir_name, os.pardir))
-
-
-def find_eslintrc(start_dir):
-    """
-    Locates the most relevant .eslintrc file. Of the following
-    locations, the first to be found will be used:
-
-        1. An .eslintrc file in the start_dir or any of its parents.
-        2. If the file has not been saved yet, ~/.eslintrc will be
-           used.
-
-    start_dir is normally set to the directory of the file being
-    validated.
-
-    When start_dir is not provided (which happens with files that
-    are not saved yet), ~/.eslintrc is the only candidate that is
-    considered.
-
-    If no relevant .eslintrc is found, the return value is None.
-    """
-
-    if start_dir:
-        # locate the nearest .eslintrc
-        eslintrc = find_up_the_tree(start_dir, '.eslintrc')
-        if eslintrc:
-            return eslintrc
-
-    # last ditch: look for .eslintrc in the user’s home directory
-    home_eslintrc = os.path.expanduser('~/.eslintrc')
-    if os.path.isfile(home_eslintrc):
-        return home_eslintrc
-
-    return None
-
-
 def show_error_message(message):
     context = {
         'message': message,
@@ -148,9 +92,6 @@ def validate(quiet=False):
     # absolute path of this file, used to reference other files
     my_dir = os.path.abspath(os.path.dirname(__file__))
 
-    # locate the .eslintrc to use
-    eslintrc = find_eslintrc(os.environ.get('TM_DIRECTORY', None))
-
     # build eslint args
     args = [
         os.environ.get('TM_JAVASCRIPT_ESLINT_ESLINT', 'eslint'),
@@ -160,13 +101,15 @@ def validate(quiet=False):
         '--stdin'
     ]
 
-    if eslintrc:
-        args.append('-c')
-        args.append(eslintrc)
-    else:
-        # Use the fallback .eslintrc
-        args.append('-c')
-        args.append(os.path.join(my_dir, 'fallback.eslintrc'))
+    # if we know the filename, pass it
+    if 'TM_FILEPATH' in os.environ:
+        args.append('--stdin-filename')
+        args.append(os.path.basename(os.environ['TM_FILEPATH']))
+
+    # the working directory; used by eslint to find its config files
+    cwd = os.environ.get('TM_DIRECTORY', None)
+    if not cwd:
+        cwd = os.environ.get('TM_PROJECT_DIRECTORY', None)
 
     # Build env for our command: ESLint (and Node) are often
     # installed to /usr/local/bin, which may not be on the
@@ -187,7 +130,8 @@ def validate(quiet=False):
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-            env=env
+            env=env,
+            cwd=cwd
         )
     except OSError as e:
         msg = [
@@ -346,7 +290,6 @@ def validate(quiet=False):
 
     # context data we will send to JavaScript
     context = {
-        'eslintrc': eslintrc,
         'issues': issues,
         'timestamp': time.strftime('%c')
     }

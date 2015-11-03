@@ -31,17 +31,8 @@
 
             Validation report for <a href="<%= fileUrl %>"><tt><b><%= targetFilename %></b></tt></a>
 
-            <% if (eslintrc) { %>
-                <p class="small">Used settings from
-                    <a href="txmt://open?url=file://<%= eslintrc %>"><tt><%= eslintrc %></tt></a>
-                </p>
-            <% } else { %>
-                <p class="small">No .eslintrc found. Used eslint:recommended settings.</p>
-                <p class="small">Run <tt>eslint --init</tt> from the command line, or see
-                    <a href="http://eslint.org/docs/user-guide/configuring" class="open-external">http://eslint.org/docs/user-guide/configuring</a>
-                    for customization instructions.
-                </p>
-            <% } %>
+            <p class="small"><a href="http://eslint.org/docs/user-guide/configuring" class="open-external">How to configure ESLint</a>
+            </p>
         </h4>
     </div>
     <ul class="list-group">
