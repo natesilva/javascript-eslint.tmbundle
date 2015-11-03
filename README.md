@@ -40,7 +40,7 @@ In most cases no configuration is required. However, in some cases you may want 
     2. Navigate to *JavaScript ESLint* > *Menu Actions* > *Save & Validate with ESLint*.
     3. In the drawer that appears, delete the “Key Equivalent” of `⌘S`.
 * **Use a project-specific ESLint configuration:**
-    * `eslint` automatically uses `.eslintrc` files found in your directory tree. See the documentation on [configuring ESLint](http://eslint.org/docs/configuring/) for more information.
+    * `eslint` automatically uses `.eslintrc` files found in your directory tree. See the documentation on [configuring ESLint](http://eslint.org/docs/user-guide/configuring) for more information.
     
 ## Uninstall
 
