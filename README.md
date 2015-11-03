@@ -2,8 +2,6 @@
 
 Use the [ESLint](http://eslint.org/) JavaScript validator in [TextMate 2](https://github.com/textmate/textmate).
 
-(Want to use JSHint instead? Try the [jshint-external.tmbundle](https://github.com/natesilva/jshint-external.tmbundle))
-
 <img src="http://natesilva.github.io/javascript-eslint.tmbundle/images/no-errors-2.0.0.png" width="500" style="width:560px;" alt="Screenshot 1">
 
 ## Features
