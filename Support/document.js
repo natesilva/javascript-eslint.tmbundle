@@ -3,7 +3,7 @@
 'use strict';
 
 Zepto(document).ready(function($) {
-  var VERSION = '1.2.0';
+  var VERSION = '2.0.0';
 
   // Remove the marker flag indicating that the validation window
   // for this document is showing.
@@ -43,4 +43,46 @@ Zepto(document).ready(function($) {
   });
 
   $('.version-number').text('v' + VERSION);
+
+	// parse a version number into semver parts
+  var parseVersion = function(ver) {
+    return ver.split('.').map(function(part) { return parseInt(part, 10); });
+  };
+
+  // return true if target is newer than current
+  var newer = function(current, target) {
+    var currentParts = parseVersion(current);
+    var targetParts = parseVersion(target);
+    if (currentParts.length !== 3 || targetParts.length !== 3) { return false; }
+
+    if (targetParts[0] > currentParts[0]) { return true; }
+    if (targetParts[0] < currentParts[0]) { return false; }
+
+    if (targetParts[1] > currentParts[1]) { return true; }
+    if (targetParts[1] < currentParts[1]) { return false; }
+
+    if (targetParts[2] > currentParts[2]) { return true; }
+    if (targetParts[2] < currentParts[2]) { return false; }
+
+    return false;
+  };
+
+  $('.update-checker').on('click', function(e) {
+    e.preventDefault();
+    $.ajax({
+      url: 'http://natesilva.github.io/javascript-eslint.tmbundle/latest.json',
+      success: function(data) {
+        $('.update-checker').addClass('hidden');
+        if (newer(VERSION, data.latest)) {
+          $('.update-available').removeClass('hidden');
+        } else {
+          $('.no-update').removeClass('hidden');
+        }
+      },
+      error: function() {
+        $('.update-checker').addClass('hidden');
+        $('.update-error').removeClass('hidden');
+      }
+    });
+  });
 });
