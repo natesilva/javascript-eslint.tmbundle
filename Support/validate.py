@@ -90,8 +90,10 @@ def show_error_message(message):
 
     template_path = os.path.join(my_dir, 'template.html')
     template = open(template_path, 'r').read()
-    template = template.replace('{{ TM_BUNDLE_SUPPORT }}',
-        os.environ['TM_BUNDLE_SUPPORT'])
+    template = template.replace(
+        '{{ TM_BUNDLE_SUPPORT }}',
+        os.environ['TM_BUNDLE_SUPPORT']
+    )
     template = template.replace('{{ EJS_TEMPLATE }}', json.dumps(error_ejs))
     template = template.replace('{{ CONTEXT }}', json.dumps(context))
 
@@ -143,68 +145,28 @@ def get_marker_directory():
 
 
 def validate(quiet=False):
-    # locate the .eshintrc to use
+    # absolute path of this file, used to reference other files
+    my_dir = os.path.abspath(os.path.dirname(__file__))
+
+    # locate the .eslintrc to use
     eslintrc = find_eslintrc(os.environ.get('TM_DIRECTORY', None))
-
-    # Copy stdin to a named temporary file: at this time eslint
-    # doesn’t support reading from stdin.
-    file_to_validate = tempfile.NamedTemporaryFile(suffix='.js')
-
-    if os.environ['TM_SCOPE'].startswith('source.js'):
-        shutil.copyfileobj(sys.stdin, file_to_validate)
-    else:
-        # If we are validating an HTML file with embedded
-        # JavaScript, only copy content within the
-        # <script>…</script> tags to the subprocess.
-        start_tag = re.compile('(\<\s*script)[\s\>]', re.IGNORECASE)
-        end_tag = re.compile('\<\/\s*script[\s\>]', re.IGNORECASE)
-        state = 'IGNORE'
-        for line in sys.stdin:
-            while line:
-                if state == 'IGNORE':
-                    match = start_tag.search(line)
-                    if match:
-                        # found a script tag
-                        line = ' ' * match.end(1) + line[match.end(1):]
-                        state = 'LOOK_FOR_END_OF_OPENING_TAG'
-                    else:
-                        file_to_validate.write('\n')
-                        line = None
-
-                elif state == 'LOOK_FOR_END_OF_OPENING_TAG':
-                    gt_pos = line.find('>')
-                    if gt_pos != -1:
-                        line = ' ' * (gt_pos + 1) + line[gt_pos + 1:]
-                        state = 'PIPE_TO_OUTPUT'
-                    else:
-                        file_to_validate.write('\n')
-                        line = None
-
-                elif state == 'PIPE_TO_OUTPUT':
-                    match = end_tag.search(line)
-                    if match:
-                        # found closing </script> tag
-                        file_to_validate.write(line[:match.start()])
-                        line = line[match.end():]
-                        state = 'IGNORE'
-                    else:
-                        file_to_validate.write(line)
-                        line = None
-
-    file_to_validate.flush()
 
     # build eslint args
     args = [
         os.environ.get('TM_JAVASCRIPT_ESLINT_ESLINT', 'eslint'),
         '-f',
-        'compact'
+        'compact',
+        '--no-color',
+        '--stdin'
     ]
 
     if eslintrc:
         args.append('-c')
         args.append(eslintrc)
-
-    args.append(file_to_validate.name)
+    else:
+        # Use the fallback .eslintrc
+        args.append('-c')
+        args.append(os.path.join(my_dir, 'fallback.eslintrc'))
 
     # Build env for our command: ESLint (and Node) are often
     # installed to /usr/local/bin, which may not be on the
@@ -220,38 +182,17 @@ def validate(quiet=False):
     env['PATH'] = ':'.join(path_parts)
 
     try:
-        eslint = subprocess.Popen(args, stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE, env=env)
-        (child_stdout, child_stderr) = eslint.communicate()
-
-        if child_stderr:
-            msg = [
-            'Hi there. This is the “JavaScript ESLint” bundle for ' +
-                'TextMate. I validate your code using ESLint.',
-            '',
-            'I had the following problem running <code>eslint</code>:',
-            '',
-            '<code>%s</code>' % child_stderr,
-            '',
-            '<h4>How to disable validation</h4>',
-            'If you mistakenly installed this validation tool and want to ' +
-                'disable it, you can do so in TextMate:',
-            '',
-            '<ol>' +
-                '<li>On the TextMate menu, choose ' +
-                '<i>Bundles</i> > <i>Edit Bundles…</i></li>' +
-                '<li>Locate “JavaScript ESLint”</li>' +
-                '<li>Uncheck “Enable this item”</li>' +
-                '<li>Close the Bundle Editor and choose “Save”</li>' +
-            '</ol>'
-            ]
-            show_error_message('<br>'.join(msg))
-            sys.exit()
-
+        eslint = subprocess.Popen(
+            args,
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            env=env
+        )
     except OSError as e:
         msg = [
             'Hi there. This is the “JavaScript ESLint” bundle for ' +
-                'TextMate. I validate your code using ESLint.',
+            'TextMate. I validate your code using ESLint.',
             '',
             'I had the following problem running <code>eslint</code>:',
             '',
@@ -259,28 +200,97 @@ def validate(quiet=False):
             '',
             '<h4>How to fix it</h4>',
             'Make sure the <code>eslint</code> and <code>node</code> ' +
-                'commands are on the <code>PATH</code>.',
+            'commands are on the <code>PATH</code>.',
             '',
             '<ol>' +
-                '<li>Go to <i>TextMate</i> > <i>Preferences…</i> > ' +
-                    '<i>Variables</i></li>' +
-                '<li>Ensure the <code>PATH</code> is enabled there and that ' +
-                    'it includes the location of your <code>eslint</code> ' +
-                    'and <code>node</code> commands.</li>'
+            '   <li>Go to <i>TextMate</i> > <i>Preferences…</i> > ' +
+            '       <i>Variables</i></li>' +
+            '   <li>Ensure the <code>PATH</code> is enabled there and that ' +
+            '       it includes the location of your <code>eslint</code> ' +
+            '       and <code>node</code> commands.</li>'
             '</ol>',
             'The path currently used by TextMate bundles is:',
             '',
             '<div style="overflow:auto"><code>%s</code></div>' % env['PATH'],
             '<h4>How to disable validation</h4>',
             'If you mistakenly installed this validation tool and want to ' +
-                'disable it, you can do so in TextMate:',
+            'disable it, you can do so in TextMate:',
             '',
             '<ol>' +
-                '<li>On the TextMate menu, choose ' +
-                '<i>Bundles</i> > <i>Edit Bundles…</i></li>' +
-                '<li>Locate “JavaScript ESLint”</li>' +
-                '<li>Uncheck “Enable this item”</li>' +
-                '<li>Close the Bundle Editor and choose “Save”</li>' +
+            '   <li>On the TextMate menu, choose ' +
+            '   <i>Bundles</i> > <i>Edit Bundles…</i></li>' +
+            '   <li>Locate “JavaScript ESLint”</li>' +
+            '   <li>Uncheck “Enable this item”</li>' +
+            '   <li>Close the Bundle Editor and choose “Save”</li>' +
+            '</ol>'
+        ]
+        show_error_message('<br>'.join(msg))
+        sys.exit()
+
+    # Pipe stdin to the subprocess; if we are validating an HTML
+    # file with embedded JavaScript, only pipe content within the
+    # <script>…</script> tags to the subprocess.
+    lines = []
+    if os.environ['TM_SCOPE'].startswith('source.js'):
+        for line in sys.stdin:
+            lines.append(line)
+    else:
+        start_tag = re.compile('(\<\s*script)[\s\>]', re.IGNORECASE)
+        end_tag = re.compile('\<\/\s*script[\s\>]', re.IGNORECASE)
+        state = 'IGNORE'
+        for line in sys.stdin:
+            while line:
+                if state == 'IGNORE':
+                    match = start_tag.search(line)
+                    if match:
+                        # found a script tag
+                        line = ' ' * match.end(1) + line[match.end(1):]
+                        state = 'LOOK_FOR_END_OF_OPENING_TAG'
+                    else:
+                        lines.append('\n')
+                        line = None
+
+                elif state == 'LOOK_FOR_END_OF_OPENING_TAG':
+                    gt_pos = line.find('>')
+                    if gt_pos != -1:
+                        line = ' ' * (gt_pos + 1) + line[gt_pos + 1:]
+                        state = 'PIPE_TO_OUTPUT'
+                    else:
+                        lines.append('\n')
+                        line = None
+
+                elif state == 'PIPE_TO_OUTPUT':
+                    match = end_tag.search(line)
+                    if match:
+                        # found closing </script> tag
+                        lines.append(line[:match.start()])
+                        line = line[match.end():]
+                        state = 'IGNORE'
+                    else:
+                        lines.append(line)
+                        line = None
+
+    (stdout, stderr) = eslint.communicate(''.join(lines))
+
+    if stderr:
+        msg = [
+            'Hi there. This is the “JavaScript ESLint” bundle for ' +
+            'TextMate. I validate your code using ESLint.',
+            '',
+            'I had the following problem running <code>eslint</code>:',
+            '',
+            '<code>%s</code>' % stderr,
+            '',
+            '<h4>How to disable validation</h4>',
+            'If you mistakenly installed this validation tool and want to ' +
+            '   disable it, you can do so in TextMate:',
+            '',
+            '<ol>' +
+            '   <li>On the TextMate menu, choose ' +
+            '   <i>Bundles</i> > <i>Edit Bundles…</i></li>' +
+            '   <li>Locate “JavaScript ESLint”</li>' +
+            '   <li>Uncheck “Enable this item”</li>' +
+            '   <li>Close the Bundle Editor and choose “Save”</li>' +
             '</ol>'
         ]
         show_error_message('<br>'.join(msg))
@@ -288,12 +298,14 @@ def validate(quiet=False):
 
     # parse the results
 
-    rx = re.compile('^[^:]+\: line (?P<line>\d+), col (?P<character>\d+), ' +
-        '(?P<code>\w+) - (?P<reason>.+?)(\s\((?P<shortname>[\w\-]+)\))?$')
+    rx = re.compile(
+        '^[^:]+\: line (?P<line>\d+), col (?P<character>\d+), ' +
+        '(?P<code>\w+) - (?P<reason>.+?)(\s\((?P<shortname>[\w\-]+)\))?$'
+    )
 
     issues = []
 
-    for line in child_stdout.split('\n'):
+    for line in stdout.split('\n'):
         line = line.strip()
         if not line:
             continue
@@ -375,15 +387,15 @@ def validate(quiet=False):
     markerFile.close()
 
     # read and prepare the template
-    my_dir = os.path.abspath(os.path.dirname(__file__))
-
     content_ejs_path = os.path.join(my_dir, 'content.ejs')
     content_ejs = open(content_ejs_path, 'r').read()
 
     template_path = os.path.join(my_dir, 'template.html')
     template = open(template_path, 'r').read()
-    template = template.replace('{{ TM_BUNDLE_SUPPORT }}',
-        os.environ['TM_BUNDLE_SUPPORT'])
+    template = template.replace(
+        '{{ TM_BUNDLE_SUPPORT }}',
+        os.environ['TM_BUNDLE_SUPPORT']
+    )
     template = template.replace('{{ EJS_TEMPLATE }}', json.dumps(content_ejs))
     template = template.replace('{{ CONTEXT }}', json.dumps(context))
 
