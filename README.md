@@ -4,7 +4,7 @@ Use the [ESLint](http://eslint.org/) JavaScript validator in [TextMate 2](https:
 
 (Want to use JSHint instead? Try the [jshint-external.tmbundle](https://github.com/natesilva/jshint-external.tmbundle))
 
-<img src="http://natesilva.github.io/javascript-eslint.tmbundle/images/no-errors-1.1.0.png" width="560" style="width:560px;" alt="Screenshot 1">
+<img src="http://natesilva.github.io/javascript-eslint.tmbundle/images/no-errors-2.0.0.png" width="500" style="width:560px;" alt="Screenshot 1">
 
 ## Features
 
@@ -12,7 +12,7 @@ Use the [ESLint](http://eslint.org/) JavaScript validator in [TextMate 2](https:
 * Supports ESLint’s native configuration cascading.
 * Errors and warnings include a link to the relevant explanation on [eslint.org](http://eslint.org/).
 
-<img src="http://natesilva.github.io/javascript-eslint.tmbundle/images/with-errors-1.1.0.png" width="560" style="width:560px;" alt="Screenshot 2">
+<img src="http://natesilva.github.io/javascript-eslint.tmbundle/images/with-errors-2.0.0.png" width="500" style="width:560px;" alt="Screenshot 2">
 
 ## Install
 
