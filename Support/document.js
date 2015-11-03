@@ -70,7 +70,8 @@ Zepto(document).ready(function($) {
   $('.update-checker').on('click', function(e) {
     e.preventDefault();
     $.ajax({
-      url: 'http://natesilva.github.io/javascript-eslint.tmbundle/latest.json',
+      url: 'https://raw.githubusercontent.com/natesilva/javascript-eslint.tmbundle/master/latest.json',
+      dataType: 'json',
       success: function(data) {
         $('.update-checker').addClass('hidden');
         if (newer(VERSION, data.latest)) {
