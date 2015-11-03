@@ -272,7 +272,7 @@ def validate(quiet=False):
         issues.append(issue)
 
     # normalize line numbers
-    input_start_line = int(os.environ['TM_INPUT_START_LINE']) - 1
+    input_start_line = int(os.environ.get('TM_INPUT_START_LINE', 1)) - 1
     for issue in issues:
         issue['line'] += input_start_line
 
