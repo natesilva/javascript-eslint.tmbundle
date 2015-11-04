@@ -3,7 +3,7 @@
 'use strict';
 
 Zepto(document).ready(function($) {
-  var VERSION = '2.0.0';
+  var VERSION = '2.0.1';
 
   // Remove the marker flag indicating that the validation window
   // for this document is showing.
