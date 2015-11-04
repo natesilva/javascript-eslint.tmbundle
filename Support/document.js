@@ -21,7 +21,7 @@ Zepto(document).ready(function($) {
       e.preventDefault();
       var cmd = '"tell application \\"System Events\\" ' +
         'to keystroke \\"w\\" using command down"';
-      TextMate.system('osascript -e ' + cmd, function(){});
+      TextMate.system('osascript -e ' + cmd, function() {});
     }
   });
 
