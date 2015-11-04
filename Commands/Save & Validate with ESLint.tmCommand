@@ -9,6 +9,8 @@
 
 [[ -f "${TM_SUPPORT_PATH}/lib/bash_init.sh" ]] &amp;&amp; . "${TM_SUPPORT_PATH}/lib/bash_init.sh"
 
+set -f
+
 TPY=${TM_PYTHON:-python}
 HTML=$("${TPY}" "${TM_BUNDLE_SUPPORT}/validate.py" -q)
 if [[ "${HTML}" = "" ]]; then
