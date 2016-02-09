@@ -88,6 +88,15 @@ def get_marker_directory():
     return markerDir
 
 
+def result_message(errorCount, warningCount):
+    parts = []
+    if errorCount > 0:
+        parts.append('{0} error{1}'.format(errorCount, 's' if errorCount > 1 else ''))
+    if warningCount > 0:
+        parts.append('{0} warning{1}'.format(warningCount, 's' if warningCount > 1 else ''))
+    return ', '.join(parts)
+
+
 def validate(quiet=False):
     # absolute path of this file, used to reference other files
     my_dir = os.path.abspath(os.path.dirname(__file__))
@@ -324,6 +333,10 @@ def validate(quiet=False):
         if not os.path.exists(context['markerFile']):
             if quiet:
                 return
+
+    if quiet:
+        print(result_message(context['errorCount'], context['warningCount']))
+        return
 
     # create the marker file
     markerFile = open(context['markerFile'], 'w+')
