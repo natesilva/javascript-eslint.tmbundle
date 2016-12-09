@@ -102,7 +102,9 @@ def result_message(errorCount, warningCount):
         parts.append('{0} error{1}'.format(errorCount, 's' if errorCount > 1 else ''))
     if warningCount > 0:
         parts.append('{0} warning{1}'.format(warningCount, 's' if warningCount > 1 else ''))
-    return ', '.join(parts)
+    result = ', '.join(parts)
+    result += '\r\rPress Shift-Ctrl-V to view the full report.'
+    return result
 
 
 def validate(quiet=False):
