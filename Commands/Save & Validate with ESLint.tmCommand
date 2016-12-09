@@ -12,11 +12,11 @@
 set -f
 
 TPY=${TM_PYTHON:-python}
-HTML=$("${TPY}" "${TM_BUNDLE_SUPPORT}/validate.py" -q)
-if [[ "${HTML}" = "" ]]; then
+OUTPUT=$("${TPY}" "${TM_BUNDLE_SUPPORT}/validate.py" -q)
+if [[ "${OUTPUT}" = "" ]]; then
 	exit_discard
 else
-	echo ${HTML}
+	echo ${OUTPUT}
 fi
 </string>
 	<key>input</key>
@@ -30,9 +30,9 @@ fi
 	<key>outputCaret</key>
 	<string>afterOutput</string>
 	<key>outputFormat</key>
-	<string>html</string>
+	<string>text</string>
 	<key>outputLocation</key>
-	<string>newWindow</string>
+	<string>toolTip</string>
 	<key>scope</key>
 	<string>source.js</string>
 	<key>uuid</key>
