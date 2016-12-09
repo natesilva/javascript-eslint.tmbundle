@@ -133,6 +133,12 @@ def validate(quiet=False):
     # bundle’s PATH in a default install of TextMate.
     env = os.environ.copy()
     path_parts = env['PATH'].split(':')
+
+    # pre-pend the local node_modules/.bin path if it exists
+    node_bin = os.path.join(cwd, 'node_modules', '.bin')
+    if node_bin not in path_parts:
+        path_parts.insert(0, node_bin)
+
     if '/bin' not in path_parts:
         path_parts.append('/bin')
     if '/usr/bin' not in path_parts:
