@@ -2,15 +2,21 @@
 
 Use the [ESLint](http://eslint.org/) JavaScript validator in [TextMate 2](https://github.com/textmate/textmate).
 
-<img src="http://natesilva.github.io/javascript-eslint.tmbundle/images/no-errors-2.0.0.png" width="500" style="width:560px;" alt="Screenshot 1">
+<video autoplay="autoplay" loop="loop" width="366" height="114">
+  <source src="https://natesilva.github.io/javascript-eslint.tmbundle/images/gutter-popup.mp4" type="video/mp4" />
+  <img src="https://natesilva.github.io/javascript-eslint.tmbundle/images/gutter-popup.gif" width="366" height="114" alt="ESLint errors and warnings in the TextMate gutter"></video>
 
 ## Features
 
 * Validate automatically when you save your file, and on-demand.
+* Auto-fix errors using the ESLint `--fix` command.
+* Errors and warnings are displayed in the TextMate gutter.
+* Optionally get a report listing errors and warnings with links to the relevant explanations on [eslint.org](http://eslint.org/).
 * Supports ESLint’s native configuration cascading.
-* Errors and warnings include a link to the relevant explanation on [eslint.org](http://eslint.org/).
 
-<img src="http://natesilva.github.io/javascript-eslint.tmbundle/images/with-errors-2.0.0.png" width="500" style="width:560px;" alt="Screenshot 2">
+<img src="https://natesilva.github.io/javascript-eslint.tmbundle/images/fix-menu.png" width="300" style="width:300px;" alt="Use ESLint to auto-fix errors and warnings">
+
+<img src="https://natesilva.github.io/javascript-eslint.tmbundle/images/validation-report.png" width="550" style="width:550px;" alt="Optional validation report">
 
 ## Install
 
@@ -44,8 +50,8 @@ In most cases no configuration is required. However, in some cases you may want 
 ## Uninstall
 
 1. Quit TextMate.
-2. Open `~/Library/Application Support/Avian/Pristine Copy/Bundles`.
+2. Open `~/Library/Application Support/TextMate/Pristine Copy/Bundles`.
 3. Trash `javascript-eslint.tmbundle`.
 4. Open `~/Library/Application Support/Avian/Bundles`.
 5. If there is a file called `JavaScript ESLint.tmbundle`, trash it.
-6. You may need to clear TextMate’s cache by trashing `~/Library/Caches/com.macromates.TextMate.preview`.
+6. You may need to clear TextMate’s cache by trashing `~/Library/Caches/com.macromates.TextMate`.
