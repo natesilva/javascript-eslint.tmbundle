@@ -3,7 +3,7 @@
 'use strict';
 
 document.addEventListener('DOMContentLoaded', function() {
-  var VERSION = '3.0.1';
+  var VERSION = '3.0.2';
 
 	// parse a version number into semver parts
   var parseVersion = function(ver) {
