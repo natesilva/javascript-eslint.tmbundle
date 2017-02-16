@@ -149,11 +149,11 @@ class Validator(object):
         # add URLs to the issues
         if filename:
             url_maker = lambda x: \
-                'txmt://open?url=file://%s&amp;line=%d&amp;column=%d' % \
+                'txmt://open?url=file://%s&line=%d&column=%d' % \
                 (filename, x['line'], x['character'])
         else:
             url_maker = lambda x: \
-                'txmt://open?line=%d&amp;column=%d' % (x['line'], x['character'])
+                'txmt://open?line=%d&column=%d' % (x['line'], x['character'])
 
         for issue in issues:
             issue['url'] = url_maker(issue)
