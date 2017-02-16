@@ -1,0 +1,28 @@
+{!
+    Error: there was a problem running ESLint
+
+    Required context:
+        * (all required context for error.html, plus the following)
+        * errorMessage {string} - the actual error message
+!}
+{>error.html/}
+{<message}
+Hi there. This is the &ldquo;JavaScript ESLint&rdquo; bundle for
+TextMate. I validate your code using ESLint.<br>
+<br>
+I had the following problem running <code>eslint</code>:<br>
+<br>
+<code>{errorMessage|h}</code>
+<br>
+<h4>How to disable validation</h4><br>
+If you mistakenly installed this validation tool and want to
+   disable it, you can do so in TextMate:<br>
+<br>
+<ol>
+   <li>On the TextMate menu, choose
+   <i>Bundles</i> > <i>Edit Bundles&hellip;</i></li>
+   <li>Locate &ldquo;JavaScript ESLint&rdquo;</li>
+   <li>Uncheck &ldquo;Enable this item&rdquo;</li>
+   <li>Close the Bundle Editor and choose &ldquo;Save&rdquo;</li>
+</ol>'
+{/message}

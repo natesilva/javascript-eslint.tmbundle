@@ -1,0 +1,75 @@
+{!
+    Standard ESLint report template
+
+    Context:
+        * hasErrorsOrWarnings {boolean}
+        * errorCountString {string} - '1 error', '42 errors', omit if no errors
+        * warningCountString {string} - '1 warning', '42 warnings', omit if no warnings
+        * targetUrl {string} - clickable URL for the file being examined
+        * targetFilename {string} - display filename for the file being examined
+        * issues {array} - the issues to display; each item is:
+            {
+                isError: {boolean},
+                isWarning: {boolean},
+                url: {string}, - link to pos of issue in file
+                line: {number},
+                character: {number},
+                reason: {string},
+                shortname: {string} - optional
+            }
+!}
+{>base.html/}
+{<content}
+{?hasErrorsOrWarnings}
+    <div class="panel panel-default">
+{:else}
+    <div class="panel panel-success">
+{/hasErrorsOrWarnings}
+    <div class="panel-heading">
+        <h4>
+            <div class="pull-right small">
+                {?errorCountString}
+                    <span class="label label-danger">
+                        {errorCountString|h}
+                    </span>
+                {/errorCountString}
+                {?warningCountString}
+                    <span class="label label-warning">
+                        {warningCountString|h}
+                    </span>
+                {/warningCountString}
+
+                {^errorCountString}
+                    {^warningCountString}
+                        <span class="label label-success">
+                            No errors or warnings
+                        </span>
+                    {/warningCountString}
+                {/errorCountString}
+            </div>
+
+            Validation report for <a href="{targetUrl|u}"><tt><b>{targetFilename|h}</b></tt></a>
+
+            <p class="small"><a href="http://eslint.org/docs/user-guide/configuring" class="open-external">How to configure ESLint</a>
+            </p>
+        </h4>
+    </div>
+    <ul class="list-group">
+        {#issues}
+            <li class="list-group-item">
+                {?.isError}<span class="symbol">&#10060;</span>{/isError}
+                {?.isWarning}<span class="symbol">&#9888;</span>{/isWarning}
+
+                <a href="{.url|u}">at line {.line|h} position {.character|h}:</a>&nbsp;
+                <tt class="report">
+                    {.reason|h}
+                    {?.shortname}
+                         (<a href="http://eslint.org/docs/rules/{.shortname|u}.html" class="open-external">{.shortname|h}</a>)
+                    {/shortname}
+                </tt>
+            </li>
+        {/issues}
+    </ul>
+</div>
+{>version_info.html/}
+{/content}

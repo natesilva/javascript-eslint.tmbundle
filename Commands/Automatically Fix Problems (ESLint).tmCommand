@@ -2,12 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>autoRefresh</key>
-	<array>
-		<string>DocumentSaved</string>
-	</array>
 	<key>beforeRunningCommand</key>
-	<string>nop</string>
+	<string>saveActiveFile</string>
 	<key>command</key>
 	<string>#!/usr/bin/env bash
 
@@ -16,26 +12,24 @@
 set -f
 
 TPY=${TM_PYTHON:-python}
-"${TPY}" "${TM_BUNDLE_SUPPORT}/main.py" --html
+"${TPY}" "${TM_BUNDLE_SUPPORT}/main.py" --fix
 </string>
 	<key>input</key>
 	<string>document</string>
 	<key>inputFormat</key>
 	<string>text</string>
-	<key>keyEquivalent</key>
-	<string>^V</string>
 	<key>name</key>
-	<string>Validate with ESLint</string>
+	<string>Automatically Fix Problems (ESLint)</string>
 	<key>outputCaret</key>
 	<string>afterOutput</string>
 	<key>outputFormat</key>
 	<string>html</string>
 	<key>outputLocation</key>
-	<string>newWindow</string>
+	<string>toolTip</string>
 	<key>scope</key>
 	<string>source.js</string>
 	<key>uuid</key>
-	<string>682D6AFD-123B-41D2-A111-853A15E8D6FD</string>
+	<string>7D93BAB9-842F-4FE1-8A39-9144A345F551</string>
 	<key>version</key>
 	<integer>2</integer>
 </dict>
