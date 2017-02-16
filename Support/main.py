@@ -123,7 +123,7 @@ def quiet():
     warning_count = 0
 
     for issue in issues:
-        if (should_ignore(issue['reason'])):
+        if should_ignore(issue['reason']):
             continue
         if issue['isError']:
             error_count += 1
@@ -152,7 +152,7 @@ def update_gutter_marks(issues):
     marks = []
 
     for item in issues:
-        if (should_ignore(item['reason'])):
+        if should_ignore(item['reason']):
             continue
         msg = item['reason']
         if 'shortname' in item:
@@ -162,15 +162,24 @@ def update_gutter_marks(issues):
 
     subprocess.call([mate, '--clear-mark=warning', file_path])
 
-    for mark in marks:
-        subprocess.call(
-            [
-                mate,
-                '--set-mark=warning:[ESLint] {0}'.format(mark[0]),
-                '--line={0}'.format(mark[1]),
-                file_path
-            ]
-        )
+    # set the gutter marks 10 at a time to improve performance
+    # the choice of 10 is arbitrary -- enough to improve performance
+    # but shouldn’t cause the cmd line to be too long
+
+    def chunks(list_to_chunk, chunk_size):
+        """
+        Yield successive chunk_size-sized chunks from list_to_chunk.
+        """
+        for i in xrange(0, len(list_to_chunk), chunk_size):
+            yield list_to_chunk[i:i + chunk_size]
+
+    for chunk in list(chunks(marks, 10)):
+        args = [mate]
+        for mark in chunk:
+            args.append('--set-mark=warning:[ESLint] {0}'.format(mark[0]))
+            args.append('--line={0}'.format(mark[1]))
+        args.append(file_path)
+        subprocess.call(args)
 
 
 def fix():
