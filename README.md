@@ -22,9 +22,12 @@ Use the [ESLint](http://eslint.org/) JavaScript validator in [TextMate 2](https:
 
 First install ESLint:
 
-1. Install [Node.js](http://nodejs.org/).
-2. `[sudo] npm install -g eslint`
-3. (Optional) Create a starter ESLint configuration: `eslint --init`
+* In your project
+  * `npm install --save eslint`
+* Or globally
+  * `[sudo] npm install -g eslint`
+
+(Optional) Create a starter ESLint configuration: `eslint --init`
 
 Now install the bundle:
 
