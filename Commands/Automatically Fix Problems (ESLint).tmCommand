@@ -12,7 +12,12 @@
 set -f
 
 TPY=${TM_PYTHON:-python}
-"${TPY}" "${TM_BUNDLE_SUPPORT}/main.py" --fix
+OUTPUT=$("${TPY}" "${TM_BUNDLE_SUPPORT}/main.py" --fix)
+
+if [[ ${OUTPUT} == *"!DOCTYPE html"* ]]; then
+  exit_show_html "${OUTPUT}"
+fi
+
 </string>
 	<key>input</key>
 	<string>document</string>

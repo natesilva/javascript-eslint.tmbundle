@@ -197,7 +197,21 @@ def fix():
     filename = os.environ['TM_FILEPATH']
     cwd = get_cwd()
 
-    the_validator.fix(filename, cwd)
+    try:
+        the_validator.fix(filename, cwd)
+    except validator.ValidateError as err:
+        context = {
+            'BASE_PATH': BASE_PATH,
+            'timestamp': time.strftime('%c'),
+            'errorMessage': err.message,
+        }
+        if err.path:
+            context['searchPath'] = err.path
+            html = ASHES_ENV.render('error_eslint_path.html', context)
+        else:
+            html = ASHES_ENV.render('error_eslint_other.html', context)
+        print(html)
+        sys.exit()
 
     mate = os.environ['TM_MATE']
     subprocess.call([mate, '--clear-mark=warning', filename])

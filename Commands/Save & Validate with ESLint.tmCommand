@@ -13,6 +13,11 @@ set -f
 
 TPY=${TM_PYTHON:-python}
 OUTPUT=$("${TPY}" "${TM_BUNDLE_SUPPORT}/main.py")
+
+if [[ ${OUTPUT} == *"!DOCTYPE html"* ]]; then
+  exit_show_html "${OUTPUT}"
+fi
+
 if [[ "${OUTPUT}" = "" ]]; then
 	exit_discard
 else

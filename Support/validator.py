@@ -51,7 +51,7 @@ class Validator(object):
         try:
             subprocess.call(args, env=env, cwd=cwd)
         except OSError as err:
-            raise ValidateError(err.message, env['PATH'])
+            raise ValidateError(err.__str__(), env['PATH'])
 
 
     def run(self, input_iterable=sys.stdin, filename=None, input_is_html=False,
