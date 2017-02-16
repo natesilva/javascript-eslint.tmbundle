@@ -34,6 +34,7 @@ class Validator(object):
         """
         self.eslint_command = eslint_command
 
+
     def fix(self, filename, cwd):
         """
         Run the eslint --fix command.
@@ -64,7 +65,8 @@ class Validator(object):
             <script>…</script> tags
         line_offset -- if the input_iterable is not the entire file,
             this is used to correct the line numbers
-        cwd -- working directory; used by eslint to find its config
+        cwd -- the project directory, or the file’s directory if no
+            project is open; used by eslint to find its config
         """
 
         env = os.environ.copy()
@@ -81,7 +83,7 @@ class Validator(object):
         # if we know the filename, pass it
         if filename:
             args.append('--stdin-filename')
-            args.append(os.path.basename(filename))
+            args.append(os.path.relpath(filename, cwd))
 
         try:
             eslint = subprocess.Popen(

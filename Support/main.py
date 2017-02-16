@@ -9,6 +9,7 @@ from __future__ import print_function
 import os
 import sys
 import time
+import re
 import subprocess
 import validator
 from ashes import AshesEnv
@@ -16,6 +17,23 @@ from ashes import AshesEnv
 THIS_DIR = os.path.abspath(os.path.dirname(__file__))
 BASE_PATH = 'tm-file://' + os.environ['TM_BUNDLE_SUPPORT']
 ASHES_ENV = AshesEnv([os.path.join(THIS_DIR, 'templates')])
+IGNORE_ISSUES = [
+    '^File ignored because of a matching ignore pattern'
+]
+
+def get_cwd():
+    """ What directory should we cd to before running eslint? """
+    cwd = os.environ.get('TM_PROJECT_DIRECTORY', None)
+    if not cwd:
+        cwd = os.environ.get('TM_DIRECTORY', None)
+    return cwd
+
+def should_ignore(issue_reason):
+    """ Given the reason text for an issue, should we ignore it? """
+    for rx in IGNORE_ISSUES:
+        if re.match(rx, issue_reason):
+            return True
+    return False
 
 def validate():
     """
@@ -29,9 +47,7 @@ def validate():
     filename = os.environ.get('TM_FILEPATH', None)
     input_is_html = not os.environ['TM_SCOPE'].startswith('source.js')
     line_offset = int(os.environ.get('TM_INPUT_START_LINE', 1)) - 1
-    cwd = os.environ.get('TM_DIRECTORY', None)
-    if not cwd:
-        cwd = os.environ.get('TM_PROJECT_DIRECTORY', None)
+    cwd = get_cwd()
 
     try:
         issues = the_validator.run(
@@ -69,7 +85,7 @@ def full_report():
     }
 
     if 'TM_FILEPATH' in os.environ:
-        context['targetFilename'] = os.path.basename(os.environ['TM_FILEPATH'])
+        context['targetFilename'] = os.path.relpath(os.environ['TM_FILEPATH'], get_cwd())
         context['targetUrl'] = 'txmt://open?url=file://%s' % os.environ['TM_FILEPATH']
 
     error_count = 0
@@ -107,6 +123,8 @@ def quiet():
     warning_count = 0
 
     for issue in issues:
+        if (should_ignore(issue['reason'])):
+            continue
         if issue['isError']:
             error_count += 1
         if issue['isWarning']:
@@ -134,10 +152,12 @@ def update_gutter_marks(issues):
     marks = []
 
     for item in issues:
+        if (should_ignore(item['reason'])):
+            continue
         msg = item['reason']
         if 'shortname' in item:
             msg += ' ({0})'.format(item['shortname'])
-        pos = '{0}:{1}'.format(item['line'], item['character'])
+        pos = '{0}:{1}'.format(item['line'] or 1, item['character'])
         marks.append((msg, pos))
 
     subprocess.call([mate, '--clear-mark=warning', file_path])
@@ -166,9 +186,7 @@ def fix():
     eslint_command = os.environ.get('TM_JAVASCRIPT_ESLINT_ESLINT', 'eslint')
     the_validator = validator.Validator(eslint_command)
     filename = os.environ['TM_FILEPATH']
-    cwd = os.environ.get('TM_DIRECTORY', None)
-    if not cwd:
-        cwd = os.environ.get('TM_PROJECT_DIRECTORY', None)
+    cwd = get_cwd()
 
     the_validator.fix(filename, cwd)
 
