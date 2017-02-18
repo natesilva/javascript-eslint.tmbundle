@@ -23,7 +23,7 @@ Use the [ESLint](http://eslint.org/) JavaScript validator in [TextMate 2](https:
 First install ESLint:
 
 * In your project
-  * `npm install --save eslint`
+  * `npm install --save-dev eslint`
 * Or globally
   * `[sudo] npm install -g eslint`
 
